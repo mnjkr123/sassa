@@ -611,65 +611,40 @@
       </div>
     </div>
 
-    <div class="chatbot-section">
-      <div class="chatbot-content">
-        <div class="left-content">
-          <div class="process-content">
-            <h4 class="process-content-title mb-25">
-              Powering Your Business with IntelliBots
-            </h4>
-            <p class="mb-25">
-              Integrate tools such as IntelliBots to make data-driven decisions
-              for continuous improvement.
-            </p>
-            <div class="checklist">
-              <ul>
-                <li><i class="fas fa-check"></i> Faster Response Time</li>
-                <li><i class="fas fa-check"></i> Chat Prompt Generation</li>
-                <li><i class="fas fa-check"></i> Safe and Private</li>
-              </ul>
-            </div>
-            <div class="btn-wrap">
-              <a href="about.html" class="th-btn style-radius"
-                >Get Started Now</a
-              >
-            </div>
-          </div>
+    <section class="chatbot-section">
+      <div class="chatbot-card">
+        <div class="chatbot-header">
+          <!-- Update the src with the correct logo path -->
+          <img
+            src="assets/img/logo-white.svg"
+            alt="Logo"
+            class="chatbot-logo"
+          />
+          <h4>Chat with Us</h4>
         </div>
-        <div class="chatbot-card">
-          <div class="chatbot-header">
-            <img
-              src="assets/img/logo-white.svg"
-              alt="Logo"
-              class="chatbot-logo"
-            />
-            <h4>Chat with us!</h4>
+        <div class="chatbot-body">
+          <!-- Initial Bot Message -->
+          <div class="messages">
+            <div class="bot">Hello! How can I help you today?</div>
           </div>
-          <div class="chatbot-body">
-            <!-- Initial Bot Message -->
-            <div class="messages">
-              <div class="bot">Hello! How can I help you today?</div>
-            </div>
-            <div id="spinner" class="spinner">Loading...</div>
-            <div
-              id="box-container"
-              class="box-container"
-              style="display: none; flex-wrap: wrap"
-            ></div>
-          </div>
-          <form id="chat-form">
-            <input
-              type="text"
-              id="user-input"
-              placeholder="Type your message..."
-              autocomplete="off"
-            />
-              <button type="submit">Send</button>
-            </form>
-          </div>
+          <div id="spinner" class="spinner">Loading...</div>
+          <div
+            id="box-container"
+            class="box-container"
+            style="display: none; flex-wrap: wrap"
+          ></div>
         </div>
+        <form id="chat-form">
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Type your message..."
+            autocomplete="off"
+          />
+          <button type="submit">Send</button>
+        </form>
       </div>
-    </div>
+    </section>
 
     <!--==============================
 	Footer Area
@@ -840,53 +815,54 @@
       let promptsGenerated = false; // Flag to track if prompts have been generated
       let selectedPrompt = ""; // Store the currently selected prompt
       let originalQuestion = ""; // Variable to store the first user input
-    
+
       // Event listener for the chat form submission
       document
         .getElementById("chat-form")
         .addEventListener("submit", async function (e) {
           e.preventDefault(); // Prevent default form submission behavior
           const userInput = document.getElementById("user-input").value.trim(); // Get user input
-    
+
           // Ensure there is either user input or a selected prompt
           if (!userInput && !selectedPrompt) return;
-    
+
           if (!originalQuestion) {
             originalQuestion = userInput; // Store the first user input
           }
-    
+
           displayMessage(userInput || selectedPrompt, true); // Display user input or selected prompt
           document.getElementById("user-input").value = ""; // Clear the input field
           document.getElementById("spinner").style.display = "block"; // Show loading spinner
-    
+
           const queryToSend = userInput
             ? userInput // Use the current user input if it exists
             : `${originalQuestion} in the context of ${selectedPrompt}`; // If no current input, use original question with selected prompt
-    
+
           const isInitialPrompt = !promptsGenerated; // Determine if it's the initial query
-    
+
           const botMessage = await fetchResponse(queryToSend, isInitialPrompt); // Fetch the bot's response
-    
+
           if (isInitialPrompt) {
+            // If it's the initial prompt, generate prompt boxes
             // If it's the initial prompt, generate prompt boxes
             const promptLines = botMessage
               .split("\n")
               .map((line) => line.trim())
               .map((line) => line.replace(/^\s*[-–]\s*/, "")); // Clean leading dashes
             displayPromptBoxes(promptLines);
-    
+
             promptsGenerated = true; // Set the flag to true after generating prompts
           } else {
             // For subsequent queries, format and display the response
             const formattedResponse = formatContent(botMessage);
             displayMessage(formattedResponse, false); // Display the formatted bot message
           }
-    
+
           // Reset selectedPrompt for the next interaction
           selectedPrompt = "";
           document.getElementById("spinner").style.display = "none"; // Hide loading spinner
         });
-    
+
       // Function to fetch response from the API
       async function fetchResponse(query, isInitialPrompt) {
         const apiKey = "AIzaSyACGrGvdmEbv-yydRqzaRN9uYWWfE2c-2s"; // Your API key
@@ -904,65 +880,62 @@
             },
           ],
         };
-    
+
         // Make a POST request to the API
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(requestBody), // Send the request body
         });
-    
+
         if (!response.ok) {
           throw new Error("Network response was not ok"); // Handle errors
         }
-    
+
         const data = await response.json(); // Parse the JSON response
         return (
           data.candidates[0]?.content.parts[0].text || "No response received." // Return the response text
         );
       }
-    
+
       // Function to format the content into a bullet list
       function formatContent(content) {
         if (!content) return ""; // Return empty if no content
-    
+
         const punctuationSpacing = content.replace(/([:;,.!?])\s*/g, "$1 "); // Ensure consistent spacing after punctuation
-    
-        // Add spaces between concatenated words
-        const spacedContent = punctuationSpacing.replace(/(\w)([A-Z])/g, "$1 $2"); // Insert space before capital letters
-    
+
         // Split content into sentences and bullet points
-        const sentences = spacedContent
+        const sentences = punctuationSpacing
           .split(/(?<=[.!?])\s+|(?=\*\s)/) // Split by sentence or bullet point
           .filter((sentence) => sentence.trim())
           .map((sentence) => sentence.trim());
-    
+
         console.log("Sentences:", sentences);
-    
+
         // Filter and clean sentences
         const filteredSentences = sentences.map((sentence) => {
           return sentence.replace(/\b(\w+)\s+\1\b/g, "$1"); // Remove duplicate words
         });
-    
+
         const cleanedSentences = filteredSentences.filter((sentence) => {
           const matchCount = (sentence.match(/\d+\.\s*/g) || []).length; // Count occurrences of numbered lists
           return matchCount <= 2; // Limit to a maximum of two numbered items
         });
-    
+
         const strippedSentences = cleanedSentences.map(
           (sentence) => sentence.replace(/(\*{1,2}|\s*[*]{1,2}\s*)/g, "") // Remove asterisks from sentences
         );
-    
+
         const bullets = []; // Array to hold bullet points
         let currentBullet = ""; // Temporary string for constructing bullets
-    
+
         // Create bullet points from sentences
         strippedSentences.forEach((sentence) => {
           const cleanedSentence = sentence.replace(/\.\s*\d+\.\s*/g, ". ");
           const wordCount = (currentBullet + " " + cleanedSentence)
             .trim()
             .split(" ").length;
-    
+
           // If the current bullet exceeds 25 words, push it to bullets array
           if (wordCount >= 25) {
             bullets.push((currentBullet + " " + cleanedSentence).trim());
@@ -971,12 +944,12 @@
             currentBullet += " " + cleanedSentence; // Append sentence to current bullet
           }
         });
-    
+
         // If there's remaining text in currentBullet that meets the criteria, add it to bullets
         if (currentBullet.trim() && currentBullet.split(" ").length >= 25) {
           bullets.push(currentBullet.trim());
         }
-    
+
         // Return the formatted bullet list as HTML
         const formattedList =
           `<ul>` +
@@ -993,31 +966,32 @@
             .map((bullet) => `<li>${bullet}</li>`)
             .join("") +
           `</ul>`;
-    
+
         return formattedList; // Return the formatted list
       }
-    
+
       // Function to display messages in the chat
       function displayMessage(message, isUser) {
         const messagesDiv = document.querySelector(".messages"); // Select the message display area
         const messageDiv = document.createElement("div"); // Create a new div for the message
         messageDiv.className = isUser ? "user-message" : "bot-message"; // Set class based on message type
-    
+
         // Add spacing between user message and bot response
         if (!isUser) {
           messageDiv.style.marginTop = "15px";
         }
-    
+
         messageDiv.innerHTML = message; // Set the inner HTML to the message
         messagesDiv.appendChild(messageDiv); // Append the message div to the messages area
         messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to the bottom to show the latest message
       }
-    
+
+      // Function to display prompt boxes based on the generated prompts
       // Function to display prompt boxes based on the generated prompts
       function displayPromptBoxes(prompts) {
         const boxContainer = document.getElementById("box-container");
         boxContainer.innerHTML = ""; // Clear previous boxes
-    
+
         prompts.forEach((prompt) => {
           // Remove leading spaces and dashes (single or multiple)
           const cleanedPrompt = prompt.replace(/^\s*[-–]\s*/, "");
@@ -1027,12 +1001,12 @@
           box.onclick = () => handleBoxClick(cleanedPrompt); // Add click event for selection
           boxContainer.appendChild(box); // Append box to the container
         });
-    
+
         // Show box container and style it for responsiveness
         boxContainer.style.display = "flex";
         boxContainer.style.flexWrap = "wrap";
       }
-    
+
       // Function to handle prompt box click
       function handleBoxClick(prompt) {
         selectedPrompt = prompt; // Set the selected prompt
@@ -1041,6 +1015,5 @@
         document.getElementById("chat-form").dispatchEvent(new Event("submit")); // Trigger the form submit to fetch the response
       }
     </script>
-   
   </body>
 </html>

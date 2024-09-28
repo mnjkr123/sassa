@@ -15818,6 +15818,7 @@ span.select2-selection.select2-selection--single:focus {
   height: auto;
 }
 
+
 .year-counter {
   position: absolute;
   bottom: 0%;
@@ -26486,64 +26487,49 @@ span.select2-selection.select2-selection--single:focus {
 
 /* chatbot-section */
 .chatbot-section {
-  padding-top: 30px; /* Add some padding at the top */
-  margin-top: 0px;
+  padding-top: 0px; /* Reduce padding at the top */
+  margin-top: 0px; /* Reduce margin at the top */
   display: flex;
-  justify-content: center; /* Center the contents */
-}
-
-.chatbot-content {
-  display: flex;
-  justify-content: space-between; /* Space between content and chat window */
-  align-items: flex-start; /* Align items to the start */
-  width: 100%; /* Full width within container */
-  max-width: 1400px; /* Set a max-width to align with other sections */
-  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 100px);
 }
 
 .chatbot-card {
-  width: 57%; /* Reduce width to not take full space */
+  width: 45%;
   border: 7px solid #010b13;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   background-color: white;
-  transition: transform 0.2s; /* Add a subtle hover effect */
-  margin-bottom: 30px;
-}
-
-.chatbot-card:hover {
-  transform: scale(1.02); /* Slightly enlarge on hover */
 }
 
 /* Header styling with logo */
 .chatbot-header {
   display: flex;
   align-items: center;
-  padding: 15px; /* Increase padding */
+  padding: 10px;
   background-color: #007bff;
   color: white;
   position: relative;
   justify-content: center;
-  border-bottom: 3px solid #0056b3; /* Add a bottom border */
 }
 
 .chatbot-logo {
-  width: 120px; /* Adjust logo size */
-  height: 120px;
+  width: 150px;
+  height: 150px;
   position: absolute;
   left: 25px;
 }
 
 .chatbot-header h4 {
   margin: 0;
-  font-size: 1.8em; /* Increase font size for better visibility */
+  font-size: 1.5em;
   text-align: center;
 }
 
-/* Chat body styling */
 .chatbot-body {
-  padding: 30px; /* Adjust padding */
+  padding: 40px;
   max-height: 660px;
   overflow-y: auto;
   display: flex;
@@ -26554,12 +26540,16 @@ span.select2-selection.select2-selection--single:focus {
 .messages {
   flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  height: 400px;
+  margin-bottom: 20px;
 }
 
+.messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
 /* User message right aligned */
 .user {
   background-color: #007bff;
@@ -26583,35 +26573,38 @@ span.select2-selection.select2-selection--single:focus {
   text-align: left;
 }
 
+/* Chat form and input styling */
 /* Form styles */
 form#chat-form {
   display: flex;
   justify-content: space-between;
-  padding: 10px; /* Increase padding */
-  background-color: #f8f9fa; /* Light background for form */
-  border-radius: 5px;
+  padding: 5px;
 }
 
 form#chat-form input {
   flex: 1;
-  padding: 10px; /* Increase padding */
+  padding: 5px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 form#chat-form button {
-  padding: 10px 20px; /* Adjust button padding */
+  padding: 10px 40px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Add transition for button hover */
 }
 
-form#chat-form button:hover {
-  background-color: #0056b3; /* Darken button on hover */
+#user-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 /* Spinner styling */
@@ -26631,42 +26624,13 @@ form#chat-form button:hover {
   animation: spin 1s linear infinite;
 }
 
-/* Checklist and button styling */
-.checklist {
-  margin-bottom: 15px; /* Space between checklist items */
-}
-
-.checklist ul {
-  padding-left: 20px; /* Indent checklist items */
-}
-
-.checklist li {
-  position: relative;
-  padding-left: 20px; /* Space for checkmark icon */
-}
-
-.checklist li:before {
-  position: absolute;
-  left: 0;
-  color: #007bff; /* Color for checkmark */
-}
-
-.btn-wrap {
-  margin-top: 20px; /* Space before button */
-}
-
-.th-btn {
-  display: inline-block; /* Button styling */
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-}
-
-.th-btn:hover {
-  background-color: #0056b3; /* Darken button on hover */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Box container styling */
@@ -26688,6 +26652,7 @@ form#chat-form button:hover {
   text-align: center; /* Center text */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
+
 
 .box:hover {
   background-color: #c0e6c0; /* Darker green on hover */
